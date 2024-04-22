@@ -1,0 +1,53 @@
+buildscript {
+	ext {
+		springBootVersion = '3.2.1'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'maven-publish'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.wecraft'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '21'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	// https://mvnrepository.com/artifact/com.google.guava/guava
+	implementation group: 'com.google.guava', name: 'guava', version: '12.0'
+	// https://mvnrepository.com/artifact/com.google.code.gson/gson
+	implementation group: 'com.google.code.gson', name: 'gson', version: '2.10'
+
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

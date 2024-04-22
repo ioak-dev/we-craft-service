@@ -1,0 +1,292 @@
+[
+  {
+    "question": "What is the output of the following Java code snippet?\nint x = 5;\nSystem.out.println(x++);",
+    "choices": [
+      "5",
+      "6",
+      "4",
+      "Compiling error"
+    ],
+    "answer": "5"
+  },
+  {
+    "question": "Which keyword is used to define a constant in Java?",
+    "choices": [
+      "final",
+      "static",
+      "const",
+      "define"
+    ],
+    "answer": "final"
+  },
+  {
+    "question": "What is the default value of a boolean variable in Java?",
+    "choices": [
+      "true",
+      "false",
+      "0",
+      "1"
+    ],
+    "answer": "false"
+  },
+  {
+    "question": "Which collection class allows you to grow or shrink its size?",
+    "choices": [
+      "ArrayList",
+      "LinkedList",
+      "HashMap",
+      "HashSet"
+    ],
+    "answer": "ArrayList"
+  },
+  {
+    "question": "What is the correct syntax for declaring a method in Java?",
+    "choices": [
+      "function void methodName()",
+      "methodName(): void",
+      "void methodName()",
+      "methodName(void)"
+    ],
+    "answer": "void methodName()"
+  },
+  {
+    "question": "Which loop is guaranteed to execute at least once?",
+    "choices": [
+      "for",
+      "while",
+      "do-while",
+      "foreach"
+    ],
+    "answer": "do-while"
+  },
+  {
+    "question": "What will be the result of the following code?\nString str = null;\nSystem.out.println(str.length());",
+    "choices": [
+      "null",
+      "0",
+      "NullPointerException",
+      "Runtime error"
+    ],
+    "answer": "NullPointerException"
+  },
+  {
+    "question": "Which keyword is used to implement inheritance in Java?",
+    "choices": [
+      "extends",
+      "implements",
+      "inherit",
+      "inherits"
+    ],
+    "answer": "extends"
+  },
+  {
+    "question": "What is the purpose of the 'super' keyword in Java?",
+    "choices": [
+      "To refer to the superclass constructor",
+      "To access superclass methods and variables",
+      "To create an instance of a subclass",
+      "To override superclass methods"
+    ],
+    "answer": "To access superclass methods and variables"
+  },
+  {
+    "question": "Which of the following is not a primitive data type in Java?",
+    "choices": [
+      "int",
+      "float",
+      "String",
+      "boolean"
+    ],
+    "answer": "String"
+  },
+  {
+    "question": "What is the output of the following code?\nint[] numbers = {1, 2, 3, 4, 5};\nSystem.out.println(numbers[5]);",
+    "choices": [
+      "1",
+      "5",
+      "ArrayIndexOutOfBoundsException",
+      "Compiling error"
+    ],
+    "answer": "ArrayIndexOutOfBoundsException"
+  },
+  {
+    "question": "What is the purpose of the 'break' statement in Java?",
+    "choices": [
+      "To terminate a loop",
+      "To skip the current iteration of a loop",
+      "To exit from a method",
+      "To skip the current case in a switch statement"
+    ],
+    "answer": "To terminate a loop"
+  },
+  {
+    "question": "Which keyword is used to prevent method overriding in Java?",
+    "choices": [
+      "final",
+      "private",
+      "static",
+      "abstract"
+    ],
+    "answer": "final"
+  },
+  {
+    "question": "What does JVM stand for?",
+    "choices": [
+      "Java Virtual Machine",
+      "Java Virtual Memory",
+      "Java Variable Manager",
+      "Java Visual Model"
+    ],
+    "answer": "Java Virtual Machine"
+  },
+  {
+    "question": "What is the output of the following code?\nString str = \"hello\";\nSystem.out.println(str.charAt(10));",
+    "choices": [
+      "h",
+      "e",
+      "IndexOutOfBoundsException",
+      "Compiling error"
+    ],
+    "answer": "IndexOutOfBoundsException"
+  },
+  {
+    "question": "Which of the following is a valid declaration of a String in Java?",
+    "choices": [
+      "String str = null;",
+      "String str;",
+      "String str = \"hello\";",
+      "All of the above"
+    ],
+    "answer": "All of the above"
+  },
+  {
+    "question": "What is the purpose of the 'this' keyword in Java?",
+    "choices": [
+      "To refer to the current instance of a class",
+      "To refer to the superclass constructor",
+      "To access superclass methods and variables",
+      "To override superclass methods"
+    ],
+    "answer": "To refer to the current instance of a class"
+  },
+  {
+    "question": "What is the difference between '==' and '.equals()' in Java?",
+    "choices": [
+      "They are interchangeable",
+      "'.equals()' compares object references, '==' compares values",
+      "'.equals()' compares values, '==' compares object references",
+      "There is no difference"
+    ],
+    "answer": "'.equals()' compares values, '==' compares object references"
+  },
+  {
+    "question": "What is the output of the following code?\nint x = 10;\nSystem.out.println(x > 5 ? \"true\" : \"false\");",
+    "choices": [
+      "true",
+      "false",
+      "10",
+      "Compiling error"
+    ],
+    "answer": "true"
+  },
+  {
+    "question": "What is the purpose of the 'instanceof' operator in Java?",
+    "choices": [
+      "To check if an object is an instance of a particular class",
+      "To compare two objects for equality",
+      "To access the index of an array",
+      "To terminate a loop"
+    ],
+    "answer": "To check if an object is an instance of a particular class"
+  },
+  {
+    "question": "Which keyword is used to handle exceptions in Java?",
+    "choices": [
+      "catch",
+      "try",
+      "throw",
+      "exception"
+    ],
+    "answer": "try"
+  },
+  {
+    "question": "What is the output of the following code?\nint x = 5;\nSystem.out.println(x << 2);",
+    "choices": [
+      "10",
+      "20",
+      "25",
+      "Compiling error"
+    ],
+    "answer": "20"
+  },
+  {
+    "question": "Which of the following is a loop control statement in Java?",
+    "choices": [
+      "if-else",
+      "for",
+      "switch",
+      "try-catch"
+    ],
+    "answer": "for"
+  },
+  {
+    "question": "What is the purpose of the 'static' keyword in Java?",
+    "choices": [
+      "To define constants",
+      "To create an instance of a class",
+      "To access non-static methods and variables",
+      "To specify that a method or variable belongs to the class, not to instances of the class"
+    ],
+    "answer": "To specify that a method or variable belongs to the class, not to instances of the class"
+  },
+  {
+    "question": "What is the output of the following code?\nint x = 5;\nint y = ++x;\nSystem.out.println(y);",
+    "choices": [
+      "4",
+      "5",
+      "6",
+      "Compiling error"
+    ],
+    "answer": "6"
+  },
+  {
+    "question": "What is the purpose of the 'new' keyword in Java?",
+    "choices": [
+      "To allocate memory for an object",
+      "To call a constructor",
+      "To create a new instance of a class",
+      "All of the above"
+    ],
+    "answer": "All of the above"
+  },
+  {
+    "question": "What is the output of the following code?\nint x = 5;\nSystem.out.println(x--);",
+    "choices": [
+      "5",
+      "4",
+      "6",
+      "Compiling error"
+    ],
+    "answer": "5"
+  },
+  {
+    "question": "Which of the following is not a valid modifier in Java?",
+    "choices": [
+      "static",
+      "constant",
+      "public",
+      "private"
+    ],
+    "answer": "constant"
+  },
+  {
+    "question": "What is the output of the following code?\nint x = 10;\nint y = x / 0;\nSystem.out.println(y);",
+    "choices": [
+      "0",
+      "10",
+      "Infinity",
+      "ArithmeticException"
+    ],
+    "answer": "ArithmeticException"
+  }
+]
