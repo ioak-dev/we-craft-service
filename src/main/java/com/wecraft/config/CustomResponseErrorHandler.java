@@ -1,4 +1,4 @@
-package com.talentprobe.config;
+package com.wecraft.config;
 
 import java.io.IOException;
 import java.io.InputStream;

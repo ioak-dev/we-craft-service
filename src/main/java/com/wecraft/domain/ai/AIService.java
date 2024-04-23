@@ -4,6 +4,4 @@ import java.util.List;
 
 public interface AIService {
 
-  List<AIResponse> getAIResponse(String jobDescription);
-
 }

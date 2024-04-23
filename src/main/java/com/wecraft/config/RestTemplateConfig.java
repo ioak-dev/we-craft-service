@@ -1,4 +1,4 @@
-package com.talentprobe.config;
+package com.wecraft.config;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;

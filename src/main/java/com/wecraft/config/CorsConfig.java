@@ -1,4 +1,4 @@
-package com.talentprobe.config;
+package com.wecraft.config;
 
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
