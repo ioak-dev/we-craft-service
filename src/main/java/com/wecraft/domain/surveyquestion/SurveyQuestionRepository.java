@@ -6,4 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface SurveyQuestionRepository extends MongoRepository<SurveyQuestion, String> {
 
   List<SurveyQuestion> findAllBySurveyId(String surveyId);
+
+  List<SurveyQuestion> findAllBySectionId(String sectionId);
 }

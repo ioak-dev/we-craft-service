@@ -36,7 +36,7 @@ public class SurveyJsonResource {
     private boolean aiRelevant;
     private List<String> options;
     private String response;
-
+    private List<String> responseList;
   }
 }
 

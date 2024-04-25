@@ -1,8 +1,9 @@
 package com.wecraft.domain.survey;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wecraft.domain.message.Message;
 import com.wecraft.domain.message.MessageRepository;
+import com.wecraft.domain.survey.SurveyResponseResource.SurveyResource;
+import com.wecraft.domain.survey.SurveyResponseResource.SurveySectionResource;
 import com.wecraft.domain.surveyquestion.QuestionType;
 import com.wecraft.domain.surveyquestion.SurveyQuestion;
 import com.wecraft.domain.surveyquestion.SurveyQuestionRepository;
@@ -10,6 +11,10 @@ import com.wecraft.domain.surveysection.SurveySection;
 import com.wecraft.domain.surveysection.SurveySectionRepository;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,6 +72,15 @@ public class SurveyServiceImpl implements SurveyService {
     surveyRepository.deleteById(id);
   }
 
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  @Builder
+  public static class SurveyUploadResponse {
+
+    private String surveyId;
+  }
+
   @Override
   public ResponseEntity<?> uploadSurveyFile(MultipartFile file) {
     String surveyId = "";
@@ -86,7 +100,7 @@ public class SurveyServiceImpl implements SurveyService {
               .sectionSubTitle(sectionResource.getSectionHeaderSubtitle()).build();
           surveySectionRepository.save(section);
           sectionResource.getQuestions().forEach(questionResource -> {
-            SurveyQuestion question = SurveyQuestion.builder().surveyId(savedSurvey.getId())
+            SurveyQuestion question = SurveyQuestion.builder().surveyId(savedSurvey.getId()).sectionId(section.getId())
                 .questionHeader(
                     questionResource.getQuestion()).questionSubTitle(
                     questionResource.getQuestionSubtitle())
@@ -101,24 +115,29 @@ public class SurveyServiceImpl implements SurveyService {
       exception.printStackTrace();
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
     }
-    return ResponseEntity.ok("{surveyId: " + surveyId + "}");
+    return ResponseEntity.ok(SurveyUploadResponse.builder().surveyId(surveyId).build());
   }
 
   @Override
   public ResponseEntity<SurveyResponseResource> getSurveyDetailsFromId(String surveyId) {
-    List<Message> messageList = new ArrayList<>();
     Survey survey = surveyRepository.findById(surveyId).orElseThrow(
         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "SurveyId does not exist"));
+    List<SurveySectionResource> sectionResourceList = new ArrayList<>();
+    SurveyResource.SurveyResourceBuilder builder = SurveyResource.builder();
+    builder.id(surveyId).surveyHeader(survey.getSurveyHeader()).surveySubTitle(survey.getSurveySubTitle()).status(survey.getStatus());
     List<SurveySection> surveySectionList = surveySectionRepository.findAllBySurveyId(surveyId);
-    List<SurveyQuestion> surveyQuestionList = surveyQuestionRepository.findAllBySurveyId(surveyId);
-    surveyQuestionList.forEach(surveyQuestion -> {
-      List<Message> messageListForQuestion = messageRepository
-          .findAllByQuestionId(surveyQuestion.getId());
-      messageList.addAll(messageListForQuestion);
+    surveySectionList.forEach(surveySection -> {
+      SurveySectionResource surveySectionResource = new SurveySectionResource();
+      surveySectionResource.setId(surveySection.getId());
+      surveySectionResource.setSurveyId(surveyId);
+      surveySectionResource.setSectionHeader(surveySection.getSectionHeader());
+      surveySectionResource.setSectionSubTitle(surveySection.getSectionSubTitle());
+      List<SurveyQuestion> questionList = surveyQuestionRepository.findAllBySectionId(surveySection.getId());
+      surveySectionResource.setQuestionList(questionList);
+      sectionResourceList.add(surveySectionResource);
     });
-    SurveyResponseResource surveyResponseResource = SurveyResponseResource.builder().survey(survey)
-        .surveySectionList(surveySectionList).surveyQuestionList(surveyQuestionList)
-        .messageList(messageList).build();
+    SurveyResource surveyResource = builder.surveySectionList(sectionResourceList).build();
+    SurveyResponseResource surveyResponseResource = SurveyResponseResource.builder().survey(surveyResource).build();
     return ResponseEntity.ok(surveyResponseResource);
   }
 }

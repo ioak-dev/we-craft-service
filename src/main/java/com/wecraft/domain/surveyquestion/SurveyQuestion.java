@@ -23,12 +23,14 @@ public class SurveyQuestion {
   @Id
   private String id;
   private String surveyId;
+  private String sectionId;
   private String questionHeader;
   private String questionSubTitle;
   private boolean aiRelevant;
   private QuestionType questionType;
   private List<String> options;
   private String questionResponse;
+  private List<String> questionResponseList;
 
   @CreatedBy
   private String createdBy;

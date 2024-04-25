@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AIResponse {
+public class AIResource {
 
-  private String question;
-  private List<String> choices;
-  private String answer;
+  private String role;
+  private String content;
 }
