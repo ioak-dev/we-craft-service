@@ -8,4 +8,6 @@ public interface MessageRepository extends MongoRepository<Message, String> {
   List<Message> findAllByQuestionId(String questionId);
 
   Message findByQuestionId(String questionId);
+
+  void deleteAllByQuestionId(String questionId);
 }

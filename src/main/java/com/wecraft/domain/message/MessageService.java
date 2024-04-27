@@ -14,4 +14,6 @@ public interface MessageService {
 
   void delete(String id);
 
+  List<Message> messageToGpt(Message message);
+
 }

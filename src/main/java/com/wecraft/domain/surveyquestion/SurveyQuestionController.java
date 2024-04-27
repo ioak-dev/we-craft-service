@@ -1,6 +1,8 @@
 package com.wecraft.domain.surveyquestion;
 
 
+import com.wecraft.domain.message.Message;
+import com.wecraft.domain.message.MessageRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,9 @@ public class SurveyQuestionController {
   @Autowired
   private SurveyQuestionService surveyQuestionService;
 
+  @Autowired
+  private MessageRepository messageRepository;
+
   @GetMapping("/{id}")
   public ResponseEntity<SurveyQuestion> getById(@PathVariable String id) {
     return ResponseEntity.ok(surveyQuestionService.getById(id));
@@ -31,7 +36,7 @@ public class SurveyQuestionController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<SurveyQuestion> update(@PathVariable String id,
+  public ResponseEntity<?> update(@PathVariable String id,
       @RequestBody SurveyQuestion request) {
     return ResponseEntity.ok(surveyQuestionService.update(request, id));
   }
@@ -44,5 +49,10 @@ public class SurveyQuestionController {
   @DeleteMapping(value = "/{id}")
   public void delete(@PathVariable String id) {
     surveyQuestionService.delete(id);
+  }
+
+  @GetMapping("message/{questionId}")
+  public ResponseEntity<List<Message>> getAllMessagesByQuestionId(@PathVariable String questionId) {
+    return ResponseEntity.ok(messageRepository.findAllByQuestionId(questionId));
   }
 }

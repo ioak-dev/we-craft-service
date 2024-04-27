@@ -2,5 +2,5 @@ package com.wecraft.domain.message;
 
 public enum Sender {
 
-  User, Assistant
+  user, assistant, system
 }

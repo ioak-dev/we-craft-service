@@ -44,4 +44,9 @@ public class MessageController {
   public void delete(@PathVariable String id) {
     messageService.delete(id);
   }
+
+  @PostMapping(value = "/chatgpt")
+  public ResponseEntity<List<Message>> messageToGpt(@RequestBody Message request) {
+    return ResponseEntity.ok(messageService.messageToGpt(request));
+  }
 }

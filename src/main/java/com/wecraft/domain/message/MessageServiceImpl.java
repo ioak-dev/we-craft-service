@@ -1,5 +1,7 @@
 package com.wecraft.domain.message;
 
+import com.wecraft.domain.surveyquestion.SurveyQuestion;
+import com.wecraft.domain.surveyquestion.SurveyQuestionService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,9 @@ public class MessageServiceImpl implements MessageService{
 
   @Autowired
   private MessageRepository messageRepository;
+
+  @Autowired
+  private SurveyQuestionService surveyQuestionService;
 
   @Override
   public List<Message> getAllSurveyMessages() {
@@ -28,7 +33,7 @@ public class MessageServiceImpl implements MessageService{
       Message message = messageRepository.findById(id).orElseThrow(
           () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Message Not found"));
       message.setQuestionId(request.getQuestionId());
-      message.setMessage(request.getMessage());
+      message.setContent(request.getContent());
       message.setSender(request.getSender());
       return messageRepository.save(message);
     }
@@ -44,6 +49,14 @@ public class MessageServiceImpl implements MessageService{
   @Override
   public void delete(String id) {
     messageRepository.deleteById(id);
+  }
+
+  @Override
+  public List<Message> messageToGpt(Message message){
+    messageRepository.save(message);
+    SurveyQuestion surveyQuestion = surveyQuestionService.getById(message.getQuestionId());
+    List<Message> messageList = surveyQuestionService.initiateGptCall(surveyQuestion);
+    return messageList;
   }
 
 }

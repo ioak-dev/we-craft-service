@@ -23,7 +23,7 @@ public class Message {
   private String id;
   private String questionId;
   private Sender sender;
-  private String message;
+  private String content;
 
   @CreatedBy
   private String createdBy;

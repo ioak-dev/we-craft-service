@@ -48,13 +48,16 @@ public class SurveyQuestionServiceImpl implements SurveyQuestionService{
   }
 
   @Override
-  public SurveyQuestion update(SurveyQuestion request, String id) {
+  public SurveyQuestionMessageResource update(SurveyQuestion request, String id) {
     if (id != null) {
       SurveyQuestion surveyQuestion = surveyQuestionRepository.findById(id).orElseThrow(
           () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "SurveyQuestion Not found"));
       surveyQuestion.setQuestionHeader(request.getQuestionHeader());
       surveyQuestion.setQuestionSubTitle(request.getQuestionSubTitle());
-      return surveyQuestionRepository.save(surveyQuestion);
+      surveyQuestion.setQuestionResponse(request.getQuestionResponse());
+      List<Message> messageList = initiateGptCall(surveyQuestion);
+      SurveyQuestion updatedQuestion = surveyQuestionRepository.save(surveyQuestion);
+      return SurveyQuestionMessageResource.builder().surveyQuestion(updatedQuestion).messageList(messageList).build();
     }
     throw new IllegalArgumentException("SurveyQuestion id cannot be null for update");
   }
@@ -80,13 +83,13 @@ public class SurveyQuestionServiceImpl implements SurveyQuestionService{
     private List<Message> messageList;
   }
 
-  private List<Message> initiateGptCall(SurveyQuestion surveyQuestion){
+  public List<Message> initiateGptCall(SurveyQuestion surveyQuestion){
     List<Message> existingMessageList = messageRepository.findAllByQuestionId(surveyQuestion.getId());
     Survey survey = surveyRepository.findById(surveyQuestion.getSurveyId()).orElse(null);
     SurveySection surveySection = surveySectionRepository.findById(surveyQuestion.getSectionId()).orElse(null);
     AIResource aiResource = aiService.getAIResponse(surveyQuestion, existingMessageList, survey, surveySection);
     if(aiResource != null){
-      Message message = Message.builder().questionId(surveyQuestion.getId()).message(
+      Message message = Message.builder().questionId(surveyQuestion.getId()).content(
           aiResource.getContent()).sender(Sender.valueOf(aiResource.getRole())).build();
       messageRepository.save(message);
     }

@@ -1,5 +1,7 @@
 package com.wecraft.domain.surveyquestion;
 
+import com.wecraft.domain.message.Message;
+import com.wecraft.domain.surveyquestion.SurveyQuestionServiceImpl.SurveyQuestionMessageResource;
 import java.util.List;
 
 public interface SurveyQuestionService {
@@ -8,10 +10,12 @@ public interface SurveyQuestionService {
 
   SurveyQuestion create(SurveyQuestion surveyQuestion);
 
-  SurveyQuestion update(SurveyQuestion request, String id);
+  SurveyQuestionMessageResource update(SurveyQuestion request, String id);
 
   SurveyQuestion getById(String id);
 
   void delete(String id);
+
+  List<Message> initiateGptCall(SurveyQuestion surveyQuestion);
 
 }
