@@ -9,6 +9,7 @@ import com.wecraft.domain.survey.Survey;
 import com.wecraft.domain.survey.SurveyRepository;
 import com.wecraft.domain.surveysection.SurveySection;
 import com.wecraft.domain.surveysection.SurveySectionRepository;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,13 +50,17 @@ public class SurveyQuestionServiceImpl implements SurveyQuestionService{
 
   @Override
   public SurveyQuestionMessageResource update(SurveyQuestion request, String id) {
+    List<Message> messageList = new ArrayList<>();
     if (id != null) {
       SurveyQuestion surveyQuestion = surveyQuestionRepository.findById(id).orElseThrow(
           () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "SurveyQuestion Not found"));
       surveyQuestion.setQuestionHeader(request.getQuestionHeader());
       surveyQuestion.setQuestionSubTitle(request.getQuestionSubTitle());
       surveyQuestion.setQuestionResponse(request.getQuestionResponse());
-      List<Message> messageList = initiateGptCall(surveyQuestion);
+      surveyQuestion.setQuestionResponseList(request.getQuestionResponseList());
+      if(surveyQuestion.isAiRelevant()){
+        messageList = initiateGptCall(surveyQuestion);
+      }
       SurveyQuestion updatedQuestion = surveyQuestionRepository.save(surveyQuestion);
       return SurveyQuestionMessageResource.builder().surveyQuestion(updatedQuestion).messageList(messageList).build();
     }

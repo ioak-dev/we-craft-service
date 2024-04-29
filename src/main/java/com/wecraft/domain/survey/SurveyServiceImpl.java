@@ -106,7 +106,7 @@ public class SurveyServiceImpl implements SurveyService {
                     questionResource.getQuestionSubtitle())
                 .questionType(QuestionType.valueOf(questionResource.getType()))
                 .aiRelevant(questionResource.isAiRelevant()).options(questionResource.getOptions())
-                .questionResponse(questionResource.getResponse()).build();
+                .questionResponse(questionResource.getResponse()).questionResponseList(questionResource.getResponseList()).build();
             surveyQuestionRepository.save(question);
           });
         });
