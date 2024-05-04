@@ -16,6 +16,6 @@ public interface SurveyQuestionService {
 
   void delete(String id);
 
-  List<Message> initiateGptCall(SurveyQuestion surveyQuestion);
+  List<Message> initiateGptCall(SurveyQuestion surveyQuestion, boolean surveyQuestionResponse);
 
 }

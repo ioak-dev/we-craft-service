@@ -101,63 +101,61 @@ public class AIServiceImpl implements AIService{
       ObjectMapper objectMapper) {
     List<Message> messageList = new ArrayList<>();
     ArrayNode messagesArray = objectMapper.createArrayNode();
-    ObjectNode systemMessageNode = objectMapper.createObjectNode();
-    StringBuilder systemMessage = new StringBuilder();
-    StringBuilder userMessage = new StringBuilder();
+    if (existingMessageList.isEmpty()) {
+      ObjectNode systemMessageNode = objectMapper.createObjectNode();
+      StringBuilder systemMessage = new StringBuilder();
+      StringBuilder userMessage = new StringBuilder();
 
-    systemMessage.append(systemQuery);
-    systemMessage.append("The survey scope is: ").append(survey.getSurveyHeader()).append("\n");
-    if (survey.getSurveySubTitle() != null && !survey.getSurveySubTitle().isEmpty()) {
-      systemMessage.append("Subtitled: ").append(survey.getSurveySubTitle()).append("\n");
-    }
-    systemMessage.append("The survey section being completed regards: ")
-        .append(surveySection.getSectionHeader()).append("\n");
-    if (surveySection.getSectionSubTitle() != null && !surveySection.getSectionSubTitle()
-        .isEmpty()) {
-      systemMessage.append("Subtitled: ").append(surveySection.getSectionSubTitle()).append("\n");
-    }
-    systemMessage.append("The survey question is: ").append(surveyQuestion.getQuestionHeader())
-        .append("\n");
-    if (surveyQuestion.getQuestionSubTitle() != null && !surveyQuestion.getQuestionSubTitle()
-        .isEmpty()) {
-      systemMessage.append("Subtitled: ").append(surveyQuestion.getQuestionSubTitle()).append("\n");
-    }
-    systemMessageNode.put("role", "system");
-    systemMessageNode.put("content", systemMessage.toString());
-    messageList.add(Message.builder().questionId(surveyQuestion.getId()).sender(system)
-        .content(systemMessage.toString()).build());
-    messagesArray.add(systemMessageNode);
+      systemMessage.append(systemQuery);
+      systemMessage.append("The survey scope is: ").append(survey.getSurveyHeader()).append("\n");
+      if (survey.getSurveySubTitle() != null && !survey.getSurveySubTitle().isEmpty()) {
+        systemMessage.append("Subtitled: ").append(survey.getSurveySubTitle()).append("\n");
+      }
+      systemMessage.append("The survey section being completed regards: ")
+          .append(surveySection.getSectionHeader()).append("\n");
+      if (surveySection.getSectionSubTitle() != null && !surveySection.getSectionSubTitle()
+          .isEmpty()) {
+        systemMessage.append("Subtitled: ").append(surveySection.getSectionSubTitle()).append("\n");
+      }
+      systemMessage.append("The survey question is: ").append(surveyQuestion.getQuestionHeader())
+          .append("\n");
+      if (surveyQuestion.getQuestionSubTitle() != null && !surveyQuestion.getQuestionSubTitle()
+          .isEmpty()) {
+        systemMessage.append("Subtitled: ").append(surveyQuestion.getQuestionSubTitle())
+            .append("\n");
+      }
+      systemMessageNode.put("role", "system");
+      systemMessageNode.put("content", systemMessage.toString());
+      messageList.add(Message.builder().questionId(surveyQuestion.getId()).sender(system)
+          .content(systemMessage.toString()).build());
+      messagesArray.add(systemMessageNode);
 
-    ObjectNode userMessageNode = objectMapper.createObjectNode();
-    userMessage.append("My Current Response to the survey question is: ").append("\n")
-        .append(surveyQuestion.getQuestionResponse());
-    userMessageNode.put("role", "user");
-    userMessageNode.put("content", userMessage.toString());
-    messageList.add(Message.builder().questionId(surveyQuestion.getId()).sender(user)
-        .content(userMessage.toString()).build());
-    messagesArray.add(userMessageNode);
+      ObjectNode userMessageNode = objectMapper.createObjectNode();
+      userMessage.append(userQuery).append("\n")
+          .append(surveyQuestion.getQuestionResponse());
+      userMessageNode.put("role", "user");
+      userMessageNode.put("content", userMessage.toString());
+      messageList.add(Message.builder().questionId(surveyQuestion.getId()).sender(user)
+          .content(userMessage.toString()).build());
+      messagesArray.add(userMessageNode);
 
-    ObjectNode assistantMessageNode = objectMapper.createObjectNode();
-    assistantMessageNode.put("role", "assistant");
-    assistantMessageNode.put("content", initialAssistantQuery);
-    messageList.add(Message.builder().questionId(surveyQuestion.getId()).sender(assistant)
-        .content(initialAssistantQuery).build());
-    messagesArray.add(assistantMessageNode);
-    if(!existingMessageList.isEmpty()){
-      existingMessageList.subList(0, 3).clear();
+      ObjectNode assistantMessageNode = objectMapper.createObjectNode();
+      assistantMessageNode.put("role", "assistant");
+      assistantMessageNode.put("content", initialAssistantQuery);
+      messageList.add(Message.builder().questionId(surveyQuestion.getId()).sender(assistant)
+          .content(initialAssistantQuery).build());
+      messagesArray.add(assistantMessageNode);
+      messageRepository.saveAll(messageList);
+      return messagesArray;
+    } else {
+      for (Message message : existingMessageList) {
+        ObjectNode existingMessageNode = objectMapper.createObjectNode();
+        existingMessageNode.put("role", String.valueOf(message.getSender()));
+        existingMessageNode.put("content", message.getContent());
+        messagesArray.add(existingMessageNode);
+      }
+      return messagesArray;
     }
-
-    for (Message message : existingMessageList) {
-      ObjectNode existingMessageNode = objectMapper.createObjectNode();
-      existingMessageNode.put("role", String.valueOf(message.getSender()));
-      existingMessageNode.put("content", message.getContent());
-      messageList.add(Message.builder().questionId(surveyQuestion.getId()).sender(message.getSender())
-          .content(message.getContent()).build());
-      messagesArray.add(existingMessageNode);
-    }
-    messageRepository.deleteAllByQuestionId(surveyQuestion.getId());
-    messageRepository.saveAll(messageList);
-    return messagesArray;
   }
 
   private AIResource mapToAIResource(Object body) {

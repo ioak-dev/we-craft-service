@@ -55,4 +55,9 @@ public class SurveyQuestionController {
   public ResponseEntity<List<Message>> getAllMessagesByQuestionId(@PathVariable String questionId) {
     return ResponseEntity.ok(messageRepository.findAllByQuestionId(questionId));
   }
+
+  @DeleteMapping("message/{questionId}")
+  public void deleteAllMessagesByQuestionId(@PathVariable String questionId) {
+    messageRepository.deleteAllByQuestionId(questionId);
+  }
 }

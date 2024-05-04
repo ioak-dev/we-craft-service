@@ -38,6 +38,8 @@ public class SurveyQuestionServiceImpl implements SurveyQuestionService{
   @Autowired
   private AIService aiService;
 
+  private String userQuery = "My Current Response to the survey question is: ";
+
   @Override
   public List<SurveyQuestion> getAllSurveyQuestion() {
     return surveyQuestionRepository.findAll();
@@ -59,7 +61,7 @@ public class SurveyQuestionServiceImpl implements SurveyQuestionService{
       surveyQuestion.setQuestionResponse(request.getQuestionResponse());
       surveyQuestion.setQuestionResponseList(request.getQuestionResponseList());
       if(surveyQuestion.isAiRelevant()){
-        messageList = initiateGptCall(surveyQuestion);
+        messageList = initiateGptCall(surveyQuestion, true);
       }
       SurveyQuestion updatedQuestion = surveyQuestionRepository.save(surveyQuestion);
       return SurveyQuestionMessageResource.builder().surveyQuestion(updatedQuestion).messageList(messageList).build();
@@ -88,8 +90,14 @@ public class SurveyQuestionServiceImpl implements SurveyQuestionService{
     private List<Message> messageList;
   }
 
-  public List<Message> initiateGptCall(SurveyQuestion surveyQuestion){
+  public List<Message> initiateGptCall(SurveyQuestion surveyQuestion, boolean surveyQuestionResponse){
     List<Message> existingMessageList = messageRepository.findAllByQuestionId(surveyQuestion.getId());
+    if(!existingMessageList.isEmpty() && surveyQuestionResponse){
+      Message newMessage = Message.builder().questionId(surveyQuestion.getId()).content(userQuery +
+          surveyQuestion.getQuestionResponse()).sender(Sender.user).build();
+      Message savedMessage = messageRepository.save(newMessage);
+      existingMessageList.add(savedMessage);
+    }
     Survey survey = surveyRepository.findById(surveyQuestion.getSurveyId()).orElse(null);
     SurveySection surveySection = surveySectionRepository.findById(surveyQuestion.getSectionId()).orElse(null);
     AIResource aiResource = aiService.getAIResponse(surveyQuestion, existingMessageList, survey, surveySection);

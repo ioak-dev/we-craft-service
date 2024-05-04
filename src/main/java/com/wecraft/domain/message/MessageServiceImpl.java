@@ -55,7 +55,7 @@ public class MessageServiceImpl implements MessageService{
   public List<Message> messageToGpt(Message message){
     messageRepository.save(message);
     SurveyQuestion surveyQuestion = surveyQuestionService.getById(message.getQuestionId());
-    List<Message> messageList = surveyQuestionService.initiateGptCall(surveyQuestion);
+    List<Message> messageList = surveyQuestionService.initiateGptCall(surveyQuestion, false);
     return messageList;
   }
 
